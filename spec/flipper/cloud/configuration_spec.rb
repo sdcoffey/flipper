@@ -14,7 +14,7 @@ RSpec.describe Flipper::Cloud::Configuration do
 
   it "defaults url" do
     instance = described_class.new(required_options)
-    expect(instance.url).to eq("https://www.featureflipper.com/adapter")
+    expect(instance.url).to eq("https://www.flippercloud.io/adapter")
   end
 
   it "can set url" do

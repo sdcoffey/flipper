@@ -22,7 +22,7 @@ RSpec.describe Flipper::Cloud::Request do
   let(:configuration) do
     options = {
       token: "asdf",
-      url: "https://www.featureflipper.com/adapter",
+      url: "https://www.flippercloud.io/adapter",
     }
     Flipper::Cloud::Configuration.new(options)
   end
@@ -42,7 +42,7 @@ RSpec.describe Flipper::Cloud::Request do
       let(:request) { described_class.new(request_options) }
 
       before do
-        @stub = stub_request(:post, "https://www.featureflipper.com/adapter/events")
+        @stub = stub_request(:post, "https://www.flippercloud.io/adapter/events")
                 .to_return(status: 200, body: "{}")
 
         @events = request << event
@@ -61,7 +61,7 @@ RSpec.describe Flipper::Cloud::Request do
       let(:request) { described_class.new(request_options) }
 
       before do
-        @stub = stub_request(:post, "https://www.featureflipper.com/adapter/events")
+        @stub = stub_request(:post, "https://www.flippercloud.io/adapter/events")
                 .to_return(status: 200, body: "{}")
 
         request.limit.times { @events = request << event }
@@ -79,7 +79,7 @@ RSpec.describe Flipper::Cloud::Request do
 
   describe '#perform' do
     it 'does nothing if empty' do
-      stub = stub_request(:post, "https://www.featureflipper.com/adapter/events")
+      stub = stub_request(:post, "https://www.flippercloud.io/adapter/events")
              .to_return(status: 200, body: "{}")
 
       request = described_class.new(request_options)
@@ -91,7 +91,7 @@ RSpec.describe Flipper::Cloud::Request do
     it 'uses the same request id across retries' do
       allow(SecureRandom).to receive(:hex).with(16).and_return("1", "2")
 
-      stub = stub_request(:post, "https://www.featureflipper.com/adapter/events")
+      stub = stub_request(:post, "https://www.flippercloud.io/adapter/events")
              .with(headers: { "Flipper-Request-Id" => "1" })
              .to_return(status: 500, body: "{}")
 
@@ -110,7 +110,7 @@ RSpec.describe Flipper::Cloud::Request do
     end
 
     it 'uses retry strategy' do
-      stub = stub_request(:post, "https://www.featureflipper.com/adapter/events")
+      stub = stub_request(:post, "https://www.flippercloud.io/adapter/events")
              .to_return(status: 500, body: "{}")
 
       retry_strategy_options = {
@@ -150,7 +150,7 @@ RSpec.describe Flipper::Cloud::Request do
     end
 
     it 'resets upon completion' do
-      stub = stub_request(:post, "https://www.featureflipper.com/adapter/events")
+      stub = stub_request(:post, "https://www.flippercloud.io/adapter/events")
              .to_return(status: 200, body: "{}")
 
       request = described_class.new(request_options)

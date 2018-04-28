@@ -23,7 +23,7 @@ RSpec.describe Flipper::Cloud::Reporter do
   let(:configuration) do
     options = {
       token: "asdf",
-      url: "https://www.featureflipper.com/adapter",
+      url: "https://www.flippercloud.io/adapter",
     }
     Flipper::Cloud::Configuration.new(options)
   end
@@ -47,7 +47,7 @@ RSpec.describe Flipper::Cloud::Reporter do
   end
 
   before do
-    stub_request(:post, "https://www.featureflipper.com/adapter/events")
+    stub_request(:post, "https://www.flippercloud.io/adapter/events")
   end
 
   it 'creates threads on report and kills on shutdown' do
@@ -74,7 +74,7 @@ RSpec.describe Flipper::Cloud::Reporter do
       events.size == 5
     end
 
-    stub_request(:post, "https://www.featureflipper.com/adapter/events")
+    stub_request(:post, "https://www.flippercloud.io/adapter/events")
       .with(&block)
       .to_return(status: 201)
 
@@ -102,7 +102,7 @@ RSpec.describe Flipper::Cloud::Reporter do
     instance = described_class.new(reporter_options)
 
     exception = StandardError.new
-    stub_request(:post, "https://www.featureflipper.com/adapter/events")
+    stub_request(:post, "https://www.flippercloud.io/adapter/events")
       .to_raise(exception)
     instance.report(event)
     instance.shutdown
@@ -122,7 +122,7 @@ RSpec.describe Flipper::Cloud::Reporter do
     }
     instance = described_class.new(reporter_options)
 
-    stub_request(:post, "https://www.featureflipper.com/adapter/events")
+    stub_request(:post, "https://www.flippercloud.io/adapter/events")
       .to_return(status: 500)
 
     instance.report(event)

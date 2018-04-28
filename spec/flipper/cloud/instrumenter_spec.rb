@@ -6,7 +6,7 @@ require 'flipper/cloud/instrumenter'
 
 RSpec.describe Flipper::Cloud::Instrumenter do
   let(:client) do
-    Flipper::Adapters::Http::Client.new(url: "https://www.featureflipper.com/adapter")
+    Flipper::Adapters::Http::Client.new(url: "https://www.flippercloud.io/adapter")
   end
   let(:reporter) { Flipper::Cloud::Reporter.new(client: client) }
   let(:instrumenter) { Flipper::Instrumenters::Memory.new }
@@ -14,7 +14,7 @@ RSpec.describe Flipper::Cloud::Instrumenter do
   subject { described_class.new(instrumenter: instrumenter, reporter: reporter) }
 
   it 'reports event for cloud if feature enabled operation' do
-    stub_request(:post, "https://www.featureflipper.com/adapter/events")
+    stub_request(:post, "https://www.flippercloud.io/adapter/events")
       .to_return(status: 201)
 
     payload = {
