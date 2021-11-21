@@ -2,18 +2,20 @@ require 'bundler/setup'
 require 'flipper'
 
 def assert(value)
-  p value
-  unless value
-    puts "#{value} expected to be true but was false. Please correct."
+  if value
+    p value
+  else
+    puts "Expected true but was #{value}. Please correct."
     exit 1
   end
 end
 
 def refute(value)
-  p value
   if value
-    puts "#{value} expected to be false but was true. Please correct."
+    puts "Expected false but was #{value}. Please correct."
     exit 1
+  else
+    p value
   end
 end
 
@@ -61,7 +63,7 @@ other_user = User.new(3, {
   "plan" => "plus",
   "age" => 18,
   "org_admin" => true,
-  "now" => NOW + DAY,
+  "now" => NOW - DAY,
 })
 
 age_rule = Flipper.property(:age).gte(21)
@@ -128,7 +130,7 @@ refute Flipper.enabled?(:something, admin_user)
 refute Flipper.enabled?(:something, other_user)
 
 puts "\n\nBoolean Rule"
-boolean_rule = Flipper.object(true).eq(true)
+boolean_rule = Flipper.value(true).eq(true)
 Flipper.enable_rule :something, boolean_rule
 assert Flipper.enabled?(:something)
 assert Flipper.enabled?(:something, user)

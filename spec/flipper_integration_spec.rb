@@ -552,11 +552,7 @@ RSpec.describe Flipper do
 
   context "for rule" do
     it "works" do
-      rule = Flipper::Rules::Condition.new(
-        {"type" => "Property", "value" => "plan"},
-        {"type" => "Operator", "value" => "eq"},
-        {"type" => "String", "value" => "basic"}
-      )
+      rule = Flipper.property(:plan).eq("basic")
       feature.enable rule
 
       expect(feature.enabled?(basic_plan_thing)).to be(true)
@@ -566,17 +562,9 @@ RSpec.describe Flipper do
 
   context "for Any" do
     it "works" do
-      rule = Flipper::Rules::Any.new(
-        Flipper::Rules::Condition.new(
-          {"type" => "Property", "value" => "plan"},
-          {"type" => "Operator", "value" => "eq"},
-          {"type" => "String", "value" => "basic"}
-        ),
-        Flipper::Rules::Condition.new(
-          {"type" => "Property", "value" => "plan"},
-          {"type" => "Operator", "value" => "eq"},
-          {"type" => "String", "value" => "plus"}
-        )
+      rule = Flipper.any(
+        Flipper.property(:plan).eq("basic"),
+        Flipper.property(:plan).eq("plus"),
       )
       feature.enable rule
 
@@ -595,17 +583,9 @@ RSpec.describe Flipper do
         "plan" => "basic",
         "age" => 20,
       })
-      rule = Flipper::Rules::All.new(
-        Flipper::Rules::Condition.new(
-          {"type" => "Property", "value" => "plan"},
-          {"type" => "Operator", "value" => "eq"},
-          {"type" => "String", "value" => "basic"}
-        ),
-        Flipper::Rules::Condition.new(
-          {"type" => "Property", "value" => "age"},
-          {"type" => "Operator", "value" => "eq"},
-          {"type" => "Integer", "value" => 21}
-        )
+      rule = Flipper.all(
+        Flipper.property(:plan).eq("basic"),
+        Flipper.property(:age).eq(21)
       )
       feature.enable rule
 
@@ -625,25 +605,14 @@ RSpec.describe Flipper do
         "plan" => "basic",
         "age" => 20,
       })
-      rule = Flipper::Rules::Any.new(
-        Flipper::Rules::Condition.new(
-          {"type" => "Property", "value" => "admin"},
-          {"type" => "Operator", "value" => "eq"},
-          {"type" => "String", "value" => true}
-        ),
-        Flipper::Rules::All.new(
-          Flipper::Rules::Condition.new(
-            {"type" => "Property", "value" => "plan"},
-            {"type" => "Operator", "value" => "eq"},
-            {"type" => "String", "value" => "basic"}
-          ),
-          Flipper::Rules::Condition.new(
-            {"type" => "Property", "value" => "age"},
-            {"type" => "Operator", "value" => "eq"},
-            {"type" => "Integer", "value" => 21}
-          )
+      rule = Flipper.any(
+        Flipper.property(:admin).eq(true),
+        Flipper.all(
+          Flipper.property(:plan).eq("basic"),
+          Flipper.property(:age).eq(21)
         )
       )
+
       feature.enable rule
 
       expect(feature.enabled?(admin_actor)).to be(true)
