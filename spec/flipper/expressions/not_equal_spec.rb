@@ -3,11 +3,7 @@ require 'helper'
 RSpec.describe Flipper::Expressions::NotEqual do
   describe "#evaluate" do
     it "returns true when not equal" do
-      expression = described_class.new([
-        Flipper.value("basic"),
-        Flipper.value("plus"),
-      ])
-
+      expression = described_class.new(["basic", "plus"])
       expect(expression.evaluate).to be(true)
     end
 
@@ -25,11 +21,7 @@ RSpec.describe Flipper::Expressions::NotEqual do
     end
 
     it "returns false when equal" do
-      expression = described_class.new([
-        Flipper.value("basic"),
-        Flipper.value("basic"),
-      ])
-
+      expression = described_class.new(["basic", "basic"])
       expect(expression.evaluate).to be(false)
     end
 
@@ -44,6 +36,11 @@ RSpec.describe Flipper::Expressions::NotEqual do
         "second" => "foo",
       }
       expect(expression.evaluate(properties: properties)).to be(false)
+    end
+
+    it "only evaluates first two arguments equality" do
+      expression = described_class.new([20, 10, 20])
+      expect(expression.evaluate).to be(true)
     end
   end
 

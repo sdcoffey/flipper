@@ -23,7 +23,7 @@ module Flipper
       when Symbol
         convert_to_values ? Expressions::Value.new(object.to_s) : object.to_s
       else
-        raise ArgumentError, "#{object.inspect} cannot be converted into a rule expression"
+        raise ArgumentError, "#{object.inspect} cannot be converted into an expression"
       end
     end
 
@@ -80,20 +80,22 @@ module Flipper
     end
     alias gt greater_than
 
-    def greater_than_or_equal(object)
-      Expressions::GreaterThanOrEqual.new([self, self.class.build(object, convert_to_values: true)])
+    def greater_than_or_equal_to(object)
+      Expressions::GreaterThanOrEqualTo.new([self, self.class.build(object, convert_to_values: true)])
     end
-    alias gte greater_than_or_equal
+    alias gte greater_than_or_equal_to
+    alias greater_than_or_equal greater_than_or_equal_to
 
     def less_than(object)
       Expressions::LessThan.new([self, self.class.build(object, convert_to_values: true)])
     end
     alias lt less_than
 
-    def less_than_or_equal(object)
-      Expressions::LessThanOrEqual.new([self, self.class.build(object, convert_to_values: true)])
+    def less_than_or_equal_to(object)
+      Expressions::LessThanOrEqualTo.new([self, self.class.build(object, convert_to_values: true)])
     end
-    alias lte less_than_or_equal
+    alias lte less_than_or_equal_to
+    alias less_than_or_equal less_than_or_equal_to
 
     def percentage(object)
       Expressions::Percentage.new([self, self.class.build(object, convert_to_values: true)])

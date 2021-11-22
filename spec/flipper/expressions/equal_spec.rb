@@ -16,6 +16,15 @@ RSpec.describe Flipper::Expressions::Equal do
     ])
   end
 
+  it "can be built with primitives" do
+    expression = described_class.build({
+      "Equal" => ["basic", "basic"],
+    })
+
+    expect(expression).to be_instance_of(Flipper::Expressions::Equal)
+    expect(expression.args).to eq(["basic", "basic"])
+  end
+
   describe "#evaluate" do
     it "returns true when equal" do
       expression = described_class.new([
@@ -75,6 +84,25 @@ RSpec.describe Flipper::Expressions::Equal do
         "second" => "bar",
       }
       expect(expression.evaluate(properties: properties)).to be(false)
+    end
+
+    it "returns false when no args" do
+      expression = described_class.new([])
+      expect(expression.evaluate).to be(false)
+    end
+
+    it "returns false when one arg" do
+      expression = described_class.new([Flipper.value(10)])
+      expect(expression.evaluate).to be(false)
+    end
+
+    it "only evaluates first two arguments equality" do
+      expression = described_class.new([
+        Flipper.value(20),
+        Flipper.value(20),
+        Flipper.value(30),
+      ])
+      expect(expression.evaluate).to be(true)
     end
   end
 
